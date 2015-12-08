@@ -80,8 +80,8 @@ public class LuceneQueryNewsWire {
                             //Create a new extract object and fill his  data
                             tokens[mention_id]=tokens[mention_id].replace("_"," ");
                             tokens[object_id]=tokens[object_id].replace("_"," ");
-                            tokens[mention_id] = tokens[mention_id].replaceAll("[-+.^:\\/]"," ");
-                            tokens[object_id] = tokens[mention_id].replaceAll("[-+.^:,\\/]"," ");
+                            tokens[mention_id] = tokens[mention_id].replaceAll("[-+.^:\\/()!']"," ");
+                            tokens[object_id] = tokens[mention_id].replaceAll("[-+.^:,\\/()!']"," ");
                             if(tokens[mention_id]!=null && tokens[object_id]!= null ) {
                                 Nell_Extracts ne_ex = new Nell_Extracts(tokens[relation_id], tokens[mention_id], tokens[object_id]);
                                 extracts.add(ne_ex);
@@ -109,7 +109,7 @@ public class LuceneQueryNewsWire {
                         query.add(query1, BooleanClause.Occur.MUST);
                         query.add(query2, BooleanClause.Occur.MUST);
                         //parser.parse(String.valueOf(query));
-                        searcher.search(parser.parse(String.valueOf(query)), collector_bool);
+                        searcher.search(parser.parse(QueryParser.escape(String.valueOf(query))), collector_bool);
                         ScoreDoc[] hits_bool = collector_bool.topDocs().scoreDocs;
 
                         for (int k = 0; k < hits_bool.length; k++) {
