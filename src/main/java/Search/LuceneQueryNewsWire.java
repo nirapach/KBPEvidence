@@ -76,12 +76,16 @@ public class LuceneQueryNewsWire {
                         String[] tokens = line.split(COMMA_DELIMITER);
                         //System.out.println(tokens.length);
 
-                        if (tokens.length > 2) {
+                        if (tokens.length > 2 && tokens.length <4 ) {
                             //Create a new extract object and fill his  data
                             tokens[mention_id]=tokens[mention_id].replace("_"," ");
                             tokens[object_id]=tokens[object_id].replace("_"," ");
-                            Nell_Extracts ne_ex = new Nell_Extracts(tokens[relation_id], tokens[mention_id], tokens[object_id]);
-                            extracts.add(ne_ex);
+                            tokens[mention_id] = tokens[mention_id].replaceAll("[-+.^:\\/]"," ");
+                            tokens[object_id] = tokens[mention_id].replaceAll("[-+.^:,\\/]"," ");
+                            if(tokens[mention_id]!=null && tokens[object_id]!= null ) {
+                                Nell_Extracts ne_ex = new Nell_Extracts(tokens[relation_id], tokens[mention_id], tokens[object_id]);
+                                extracts.add(ne_ex);
+                            }
                         }
                     }
                     //create File object
@@ -130,6 +134,7 @@ public class LuceneQueryNewsWire {
                         }
 
                     }
+                    System.out.println("Writing CSV File for Successful "+concat_filename);
                 }
 
             }
@@ -163,10 +168,10 @@ public class LuceneQueryNewsWire {
         File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/newswire_index1/");
 
         // this is the path from which the documents to be queried
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/nell_relations_extracted/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/dbpedia/Extracted/infobox_extracted/");
 
         // this is the path from which the result needs to be stored
-        String resultdirectory = "C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/newswire_result/";
+        String resultdirectory = "C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/newswire_result_infobox/";
 
         // filetype that is present in the corpus
         String filetype = "csv";
