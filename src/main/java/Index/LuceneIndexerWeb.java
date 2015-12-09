@@ -92,25 +92,35 @@ public class LuceneIndexerWeb {
                             while ((startIndex = docContent.indexOf
                                     (
                                     "<" + tag.get(j)+">", startIndex)) != -1) {
-
                                 startIndex += tag.get(j).length() + 2;
                                 int endindex = docContent.indexOf("</" + tag.get(j)+ ">", startIndex);
                                 String content = docContent.substring(startIndex,
                                         endindex);
                                 contentBuffer.append(content);
                                 startIndex += content.length();
-                                // System.out.println(content);
+                                //System.out.println(content);
                             }
                         }
                         else if(j==1) {
                             while ((startIndex = docContent.indexOf(
                                     "<" + tag.get(j) + ">", startIndex)) != -1) {
 
-                                startIndex += tag.get(j).length() + 1;
+                                startIndex += tag.get(j).length() + 2;
+                                int endindex = docContent.indexOf("</" + tag.get(j)+ ">", startIndex);
+                                String content_prev = docContent.substring(startIndex,
+                                        endindex);
+                                content_prev=content_prev.replace("</POST>"," ");
+                                int cont_index=content_prev.lastIndexOf(">");
+                                String content=content_prev.substring(cont_index+1,content_prev.length());
+                                contentBuffer.append(content);
+                                startIndex += content_prev.length();
+                                /*startIndex += tag.get(j).length() + 1;
                                 int endindex = docContent.indexOf("\">", startIndex);
                                 String content = docContent.substring(startIndex, endindex);
                                 contentBuffer.append(content);
-                                startIndex += content.length();
+                                startIndex += content.length();*/
+                                //System.out.println(content_prev);
+                                //System.out.println(content);
                             }
                         }
                         tagContent = contentBuffer.toString();
@@ -145,10 +155,10 @@ public class LuceneIndexerWeb {
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/discussion_index9/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/web_index7/");
 
         // this is the path from which the documents to be indexed
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/web9/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/web7/");
 
         // filetype that is present in the corpus
         String filetype = "FILE";

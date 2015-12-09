@@ -1,5 +1,9 @@
 package Index; /**
  * Created by Niranjan on 12/6/2015.
+ * <p/>
+ * Created by Niranjan on 12/6/2015.
+ * <p/>
+ * Created by Niranjan on 12/6/2015.
  */
 /**
  * Created by Niranjan on 12/6/2015.
@@ -36,7 +40,7 @@ public class LuceneIndexerDiscussionForums {
 
         Date start = new Date();
 
-        Path path =Paths.get(String.valueOf(indexdirectory));
+        Path path = Paths.get(String.valueOf(indexdirectory));
         Directory inddir;
         inddir = FSDirectory.open(path);
         StandardAnalyzer indexanalyzer = new StandardAnalyzer();
@@ -63,7 +67,7 @@ public class LuceneIndexerDiscussionForums {
         File[] files = datadirectory.listFiles();
         int indexstatus = 0;
         ArrayList<String> tag = new ArrayList<String>();
-        tag.add(DOCNO);
+        //tag.add(DOCNO);
         tag.add(TEXT);
         //System.out.println(tag.size());
         int corpuslen = 0;
@@ -79,19 +83,21 @@ public class LuceneIndexerDiscussionForums {
                 String[] alldocs = fileContent.split("</doc>");
                 //since the last split will be space subtracting one from the doc count in a single trectext file
                 int docsize = alldocs.length;
-                String[] documents = new String[docsize-1];
-                for(int k=0;k<docsize-1;k++){
-                    documents[k]  = alldocs[k];
+                String[] documents = new String[docsize - 1];
+                for (int k = 0; k < docsize - 1; k++) {
+                    documents[k] = alldocs[k];
                 }
                 for (String docContent : documents) {
-                    Document document = new Document();
-                    String[] posContents=docContent.split("</post>");
-                    for (int j = 0; j < tag.size(); j++) {
-                        String tagContent = "";
-                        int startIndex = 0;
-                        StringBuffer contentBuffer = new StringBuffer();
-                        if(j==0){
-                            while ((startIndex = docContent.indexOf
+                    String[] posContents = docContent.split("</post>");
+                    for (String posContent : posContents) {
+                        Document document = new Document();
+                        if (posContent != null) {
+                            for (int j = 0; j < tag.size(); j++) {
+                                String tagContent = "";
+                                int startIndex = 0;
+                                StringBuffer contentBuffer = new StringBuffer();
+                       /* if(j==0){
+                            *//*while ((startIndex = docContent.indexOf
                                     ("<" + tag.get(j), startIndex)) != -1) {
 
                                 startIndex += tag.get(j).length() + 6;
@@ -100,45 +106,43 @@ public class LuceneIndexerDiscussionForums {
                                         endindex);
                                 contentBuffer.append(content);
                                 startIndex += content.length();
-                            }
-                        }
-                        else if(j==1) {
-                            for (String posContent : posContents){
-                                if(posContent!=null) {
-                                    while ((startIndex = posContent.indexOf(
-                                            "\">", startIndex)) != -1) {
-                                        startIndex += tag.get(j).length() + 1;
-                                        int endindex = posContent.length();
-                                        //System.out.println(startIndex+","+endindex);
-                                        if(endindex>startIndex) {
-                                            String content = posContent.substring(startIndex, endindex);
-                                            //System.out.println(content);
-                                            contentBuffer.append(content);
-                                            startIndex += content.length();
+                            }*//*
+
+                        }*/
+                                //else if(j==1){
+                                if (j == 0) {
+                                    String[] headline=posContent.split("<post author=");
+                                    if (headline.length>1) {
+                                        while ((startIndex = headline[1].indexOf(
+                                                "\"" + "p", startIndex)) != -1) {
+                                            startIndex += tag.get(j).length() + 1;
+                                            int endindex = headline[1].length();
+                                            //System.out.println(startIndex+","+endindex);
+                                            if (endindex > startIndex) {
+                                                String content = posContent.substring(startIndex, endindex);
+                                                System.out.println(content);
+                                                contentBuffer.append(content);
+                                                startIndex += content.length();
+                                            }
                                         }
                                     }
                                 }
+                                tagContent = contentBuffer.toString();
+                                // System.out.println(tagContent);
+                           /* if (j == 0)
+                                document.add(new StringField(DOCNO, tagContent,
+                                        Field.Store.YES));
+                            else*/
+                                document.add(new TextField(tag.get(j), tagContent,
+                                        Field.Store.YES));
                             }
+                            indwriter.addDocument(document);
                         }
-
-                        tagContent = contentBuffer.toString();
-                        // System.out.println(tagContent);
-                        if (j == 0)
-                            document.add(new StringField(DOCNO, tagContent,
-                                    Field.Store.YES));
-                        else
-                            document.add(new TextField(tag.get(j), tagContent,
-                                    Field.Store.YES));
-
                     }
-                    //System.out.println("Adding document");
-                    indwriter.addDocument(document);
+
                 }
-
                 indexstatus = 1;
-            }
-
-            else {
+            } else {
                 indexstatus = 0;
             }
         }
@@ -156,10 +160,10 @@ public class LuceneIndexerDiscussionForums {
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/discussion_index3/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/discussion_index2/");
 
         // this is the path from which the documents to be indexed
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/discussion_forums3/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/discussion_forums2/");
 
         // filetype that is present in the corpus
         String filetype = "FILE";
