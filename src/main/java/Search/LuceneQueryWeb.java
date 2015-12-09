@@ -62,7 +62,6 @@ public class LuceneQueryWeb {
                     fileReader = new BufferedReader(new FileReader(files[i]));
                     String line = "";
                     //Read the CSV file header to skip it
-                    System.out.println("test");
                     fileReader.readLine();
 
                     while ((line = fileReader.readLine()) != null) {
@@ -87,7 +86,6 @@ public class LuceneQueryWeb {
                     //create File object
                     File file = new File(resultdirectory+"Web_"+concat_filename+"_Evidence"+"."+filetype);
                     String filename=file.getAbsolutePath();
-                    System.out.println(filename);
                     //File writer
                     fileWriter = new FileWriter(filename);
                     //Write the CSV file header
@@ -125,7 +123,6 @@ public class LuceneQueryWeb {
                             text=text.replace("<P>"," ");
                             text=text.replace("P>"," ");*/
                             fileWriter.append(text);
-                            System.out.println(text);
                             fileWriter.append(COMMA_DELIMITER);
                             fileWriter.append(NEW_LINE_SEPARATOR);
                             //System.out.println((k + 1) + ". " + d.get(TEXT));

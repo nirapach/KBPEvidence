@@ -34,11 +34,10 @@ public class LuceneIndexerDiscussionForums {
      */
     private static String DOCNO = "doc";
     private static String TEXT = "post";
+    private static String HEADLINE = "headline";
 
     private void index(File indexdirectory, File datadirectory, String filetype)
             throws Exception {
-
-        Date start = new Date();
 
         Path path = Paths.get(String.valueOf(indexdirectory));
         Directory inddir;
@@ -58,7 +57,6 @@ public class LuceneIndexerDiscussionForums {
         indwriter.commit();
 
         indwriter.close();
-        Date end = new Date();
 
     }
 
@@ -77,18 +75,22 @@ public class LuceneIndexerDiscussionForums {
                     && files[i].canRead() && files[i].exists()) {
                 System.out.println("\n Indexing is going on with file"
                         + files[i].getCanonicalPath());
-                // File f = new File(files[i].getCanonicalPath());
                 String fileContent = new String(Files.readAllBytes(Paths
                         .get(files[i].getCanonicalPath())));
                 String[] alldocs = fileContent.split("</doc>");
-                //since the last split will be space subtracting one from the doc count in a single trectext file
+                //since the last split will be space subtracting one from the doc count in a single file
                 int docsize = alldocs.length;
                 String[] documents = new String[docsize - 1];
                 for (int k = 0; k < docsize - 1; k++) {
                     documents[k] = alldocs[k];
                 }
                 for (String docContent : documents) {
-                    String[] posContents = docContent.split("</post>");
+                    String[] posCont = docContent.split("</post>");
+                    String[] posContents = new String[posCont.length - 1];
+                    for (int p = 0; p < posCont.length - 1; p++) {
+                        posContents[p] = posCont[p];
+                    }
+
                     for (String posContent : posContents) {
                         Document document = new Document();
                         if (posContent != null) {
@@ -96,43 +98,24 @@ public class LuceneIndexerDiscussionForums {
                                 String tagContent = "";
                                 int startIndex = 0;
                                 StringBuffer contentBuffer = new StringBuffer();
-                       /* if(j==0){
-                            *//*while ((startIndex = docContent.indexOf
-                                    ("<" + tag.get(j), startIndex)) != -1) {
-
-                                startIndex += tag.get(j).length() + 6;
-                                int endindex = docContent.indexOf("\"" +">", startIndex);
-                                String content = docContent.substring(startIndex,
-                                        endindex);
-                                contentBuffer.append(content);
-                                startIndex += content.length();
-                            }*//*
-
-                        }*/
-                                //else if(j==1){
                                 if (j == 0) {
-                                    String[] headline=posContent.split("<post author=");
-                                    if (headline.length>1) {
-                                        while ((startIndex = headline[1].indexOf(
-                                                "\"" + "p", startIndex)) != -1) {
-                                            startIndex += tag.get(j).length() + 1;
-                                            int endindex = headline[1].length();
-                                            //System.out.println(startIndex+","+endindex);
-                                            if (endindex > startIndex) {
-                                                String content = posContent.substring(startIndex, endindex);
-                                                System.out.println(content);
-                                                contentBuffer.append(content);
-                                                startIndex += content.length();
-                                            }
+                                    while ((startIndex = posContent.indexOf(
+                                            "\n", startIndex)) != -1) {
+                                        startIndex += posContent.indexOf("\n") + 1;
+                                        int endindex = posContent.length();
+                                        //System.out.println(startIndex+","+endindex);
+                                        if (endindex > startIndex) {
+                                            String content_post = posContent.substring(startIndex, endindex);
+                                            int id_index=content_post.indexOf("id=");
+                                            String content=content_post.substring(id_index+9,content_post.length());
+                                            //System.out.println(content);
+                                            contentBuffer.append(content);
+                                            startIndex += content_post.length();
                                         }
                                     }
+
                                 }
                                 tagContent = contentBuffer.toString();
-                                // System.out.println(tagContent);
-                           /* if (j == 0)
-                                document.add(new StringField(DOCNO, tagContent,
-                                        Field.Store.YES));
-                            else*/
                                 document.add(new TextField(tag.get(j), tagContent,
                                         Field.Store.YES));
                             }
