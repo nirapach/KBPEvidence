@@ -1,10 +1,5 @@
-package Index; /**
- * Created by Niranjan on 12/6/2015.
- * <p/>
- * Created by Niranjan on 12/6/2015.
- * <p/>
- * Created by Niranjan on 12/6/2015.
- */
+package Index;
+
 /**
  * Created by Niranjan on 12/6/2015.
  */
@@ -12,7 +7,6 @@ package Index; /**
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -25,14 +19,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class LuceneIndexerDiscussionForums {
 
     /**
      * @param args
      */
-    private static String DOCNO = "doc";
+    //private static String DOCNO = "doc";
     private static String TEXT = "post";
     private static String HEADLINE = "headline";
 
@@ -67,16 +60,13 @@ public class LuceneIndexerDiscussionForums {
         ArrayList<String> tag = new ArrayList<String>();
         //tag.add(DOCNO);
         tag.add(TEXT);
-        //System.out.println(tag.size());
         int corpuslen = 0;
         for (int i = 0; i < files.length; i++) {
             corpuslen++;
             if (!files[i].isDirectory() && !files[i].isHidden()
                     && files[i].canRead() && files[i].exists()) {
-                System.out.println("\n Indexing is going on with file"
-                        + files[i].getCanonicalPath());
-                String fileContent = new String(Files.readAllBytes(Paths
-                        .get(files[i].getCanonicalPath())));
+                System.out.println("\n Indexing is going on with file" + files[i].getCanonicalPath());
+                String fileContent = new String(Files.readAllBytes(Paths.get(files[i].getCanonicalPath())));
                 String[] alldocs = fileContent.split("</doc>");
                 //since the last split will be space subtracting one from the doc count in a single file
                 int docsize = alldocs.length;
@@ -85,6 +75,27 @@ public class LuceneIndexerDiscussionForums {
                     documents[k] = alldocs[k];
                 }
                 for (String docContent : documents) {
+
+                    //this is for the headline tag index since it is present only once per document
+                    Document head_document = new Document();
+
+                    String tagContentHead = "";
+                    int startIndexHead = 0;
+                    StringBuffer contentBufferHead = new StringBuffer();
+
+                    while ((startIndexHead = docContent.indexOf
+                            ("<" + HEADLINE + ">", startIndexHead)) != -1) {
+                        startIndexHead += HEADLINE.length() + 2;
+                        int endindexHead = docContent.indexOf("</" + HEADLINE + ">", startIndexHead);
+                        String contentHead = docContent.substring(startIndexHead,endindexHead);
+                        contentBufferHead.append(contentHead);
+                        startIndexHead += contentHead.length();
+                        //System.out.println(content);
+                    }
+                    tagContentHead = contentBufferHead.toString();
+                    head_document.add(new TextField(HEADLINE, tagContentHead,Field.Store.YES));
+                    indwriter.addDocument(head_document);
+                    //this is for the post tag index in every document
                     String[] posCont = docContent.split("</post>");
                     String[] posContents = new String[posCont.length - 1];
                     for (int p = 0; p < posCont.length - 1; p++) {
@@ -106,8 +117,8 @@ public class LuceneIndexerDiscussionForums {
                                         //System.out.println(startIndex+","+endindex);
                                         if (endindex > startIndex) {
                                             String content_post = posContent.substring(startIndex, endindex);
-                                            int id_index=content_post.indexOf("id=");
-                                            String content=content_post.substring(id_index+9,content_post.length());
+                                            int id_index = content_post.indexOf("id=");
+                                            String content = content_post.substring(id_index + 9, content_post.length());
                                             //System.out.println(content);
                                             contentBuffer.append(content);
                                             startIndex += content_post.length();

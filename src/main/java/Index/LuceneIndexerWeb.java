@@ -114,13 +114,6 @@ public class LuceneIndexerWeb {
                                 String content=content_prev.substring(cont_index+1,content_prev.length());
                                 contentBuffer.append(content);
                                 startIndex += content_prev.length();
-                                /*startIndex += tag.get(j).length() + 1;
-                                int endindex = docContent.indexOf("\">", startIndex);
-                                String content = docContent.substring(startIndex, endindex);
-                                contentBuffer.append(content);
-                                startIndex += content.length();*/
-                                //System.out.println(content_prev);
-                                //System.out.println(content);
                             }
                         }
                         tagContent = contentBuffer.toString();

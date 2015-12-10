@@ -48,6 +48,7 @@ public class LuceneQueryWeb {
 
         QueryParser parser = new QueryParser(TEXT, new StandardAnalyzer());
 
+
         try {
 
             for (int i = 0; i < files.length; i++) {
