@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/KBPEvidence.iml" filepath="$PROJECT_DIR$/KBPEvidence.iml" />
+      <module fileurl="file://$PROJECT_DIR$/KBPEvidenceForRelations.iml" filepath="$PROJECT_DIR$/KBPEvidenceForRelations.iml" />
     </modules>
   </component>
 </project>
