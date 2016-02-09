@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2cb960ea-6ad0-4849-8981-e094e0c38a21" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/PojoClasses/Wiki_Extracts.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/Search/LuceneQueryWikipedia.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Index/LuceneIndexerWikipedia.java" afterPath="$PROJECT_DIR$/src/main/java/Index/LuceneIndexerWikipedia.java" />
     </list>
@@ -31,8 +29,8 @@
       <file leaf-file-name="LuceneIndexerWikipedia.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Index/LuceneIndexerWikipedia.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6182965">
-              <caret line="99" column="24" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.22299652">
+              <caret line="113" column="0" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3840#3848#0" expanded="true" />
@@ -312,25 +310,10 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.LuceneIndexerWikipedia">
+  <component name="RunManager" selected="Gauge Execution.Specifications">
     <configuration default="false" name="LuceneIndexerNewsWire" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="Index.LuceneIndexerNewsWire" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="KBPEvidence" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="LuceneIndexerDiscussionForums" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="Index.LuceneIndexerDiscussionForums" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -401,6 +384,19 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="KBPEvidenceForRelations" />
       <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Specifications" type="executeSpecs" factoryName="Gauge Execution" temporary="true">
+      <setting name="environment" value="" />
+      <setting name="specsToExecute" value="C:\Users\Niranjan\Documents\git_uploads\KBPEvidence\specs" />
+      <setting name="tags" value="" />
+      <setting name="parallelNodes" value="" />
+      <setting name="execInParallel" value="false" />
+      <setting name="programParameters" value="" />
+      <setting name="workingDirectory" value="" />
+      <setting name="moduleName" value="KBPEvidenceForRelations" />
+      <envMap />
+      <setting name="rowsRange" value="" />
       <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -684,18 +680,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.LuceneIndexerNewsWire" />
-      <item index="1" class="java.lang.String" itemvalue="Application.LuceneIndexerDiscussionForums" />
-      <item index="2" class="java.lang.String" itemvalue="Application.LuceneQueryNewsWire" />
-      <item index="3" class="java.lang.String" itemvalue="Application.LuceneIndexerWikipedia" />
-      <item index="4" class="java.lang.String" itemvalue="Application.LuceneQueryWikipedia" />
+      <item index="1" class="java.lang.String" itemvalue="Application.LuceneQueryNewsWire" />
+      <item index="2" class="java.lang.String" itemvalue="Application.LuceneIndexerWikipedia" />
+      <item index="3" class="java.lang.String" itemvalue="Application.LuceneQueryWikipedia" />
+      <item index="4" class="java.lang.String" itemvalue="Gauge Execution.Specifications" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.LuceneIndexerWikipedia" />
-        <item index="1" class="java.lang.String" itemvalue="Application.LuceneQueryWikipedia" />
-        <item index="2" class="java.lang.String" itemvalue="Application.LuceneQueryNewsWire" />
-        <item index="3" class="java.lang.String" itemvalue="Application.LuceneIndexerNewsWire" />
-        <item index="4" class="java.lang.String" itemvalue="Application.LuceneIndexerDiscussionForums" />
+        <item index="0" class="java.lang.String" itemvalue="Gauge Execution.Specifications" />
+        <item index="1" class="java.lang.String" itemvalue="Application.LuceneIndexerWikipedia" />
+        <item index="2" class="java.lang.String" itemvalue="Application.LuceneQueryWikipedia" />
+        <item index="3" class="java.lang.String" itemvalue="Application.LuceneQueryNewsWire" />
+        <item index="4" class="java.lang.String" itemvalue="Application.LuceneIndexerNewsWire" />
       </list>
     </recent_temporary>
   </component>
@@ -727,7 +723,13 @@
       <option name="project" value="LOCAL" />
       <updated>1454971417808</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added Wikipedia Indexer for Freebase relations">
+      <created>1455054983709</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1455054983709</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -741,7 +743,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4269103" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4269103" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28072837" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1183,8 +1185,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Index/LuceneIndexerWikipedia.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6182965">
-          <caret line="99" column="24" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.22299652">
+          <caret line="113" column="0" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3840#3848#0" expanded="true" />

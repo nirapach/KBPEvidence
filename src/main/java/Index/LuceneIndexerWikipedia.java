@@ -127,7 +127,7 @@ public class LuceneIndexerWikipedia {
                             }else{
                                 contentBuffer.append(posContent);
                                 tagContent = contentBuffer.toString();
-                                System.out.println(tagContent);
+                                document.add(new TextField(TEXT, tagContent, Field.Store.YES));
                             }
                             //System.out.println("Adding document");
                             indwriter.addDocument(document);
