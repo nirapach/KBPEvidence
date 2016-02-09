@@ -56,11 +56,12 @@ public class LuceneIndexerWikipedia {
 
         indexing(indwriter, datadirectory, filetype);
 
-
         indwriter.forceMerge(1);
         indwriter.commit();
 
+        System.out.println("Index Commited");
         indwriter.close();
+        System.out.println("Index Closed");
 
     }
 
@@ -77,6 +78,7 @@ public class LuceneIndexerWikipedia {
         for (int i = 0; i < files.length; i++) {
             corpuslen++;
             int doc_count = 0;
+            int extractCount = 0;
             if (!files[i].isDirectory() && !files[i].isHidden()
                     && files[i].canRead() && files[i].exists()) {
                 System.out.println("\n Indexing is going on with file"
@@ -91,7 +93,9 @@ public class LuceneIndexerWikipedia {
                     documents[k] = alldocs[k];
                 }
                 for (String docContent : documents) {
-
+                    extractCount += 1;
+                    docContent = docContent.replaceAll("[-+^:\\/()!'=]", " ");
+                    System.out.println("Number of extract docs so far:" + extractCount);
                     Reader reader = new StringReader(docContent);
                     DocumentPreprocessor docParser = new DocumentPreprocessor(reader);
                     List<String> sentenceList = new ArrayList<String>();
@@ -102,27 +106,33 @@ public class LuceneIndexerWikipedia {
                     }
 
                     for (String posContent : sentenceList) {
-                        //System.out.println(posContent);
 
-                        if (posContent != null && posContent!="\n") {
+                        if (posContent != null && posContent != "\n") {
                             Document document = new Document();
                             doc_count += 1;
-                            System.out.println("Number of docs so far:" + doc_count);
+                            //System.out.println("Number of NLP parsed docs so far:" + doc_count);
 
                             String tagContent = "";
                             int startIndex = 0;
                             StringBuffer contentBuffer = new StringBuffer();
 
-                            String[] inputSplits = docContent.split("<" + TEXT + ">");
-                            if (inputSplits.length > 1) {
-                                contentBuffer.append(inputSplits[1]);
-                                tagContent = contentBuffer.toString();
-                                //System.out.println(tagContent);
-                                document.add(new TextField(TEXT, tagContent, Field.Store.YES));
-                            }
+                            if (posContent.contains("<" + TEXT + ">")) {
+                                String[] inputSplits = posContent.split("<" + TEXT + ">");
+                                if (inputSplits.length > 1 && inputSplits[1]!=null) {
+                                    contentBuffer.append(inputSplits[1]);
+                                    tagContent = contentBuffer.toString();
+                                    document.add(new TextField(TEXT, tagContent, Field.Store.YES));
+                                }
 
+                            }else{
+                                contentBuffer.append(posContent);
+                                tagContent = contentBuffer.toString();
+                                System.out.println(tagContent);
+                            }
                             //System.out.println("Adding document");
                             indwriter.addDocument(document);
+
+
 
                         }
                     }
@@ -148,10 +158,10 @@ public class LuceneIndexerWikipedia {
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/foundedBy/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/siblings/");
 
         // this is the path from which the documents to be indexed
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Text/foundedBy/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Text/siblings/");
 
         // filetype that is present in the corpus
         String filetype = "txt";
