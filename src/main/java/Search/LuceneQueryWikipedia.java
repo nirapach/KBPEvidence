@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -32,7 +33,7 @@ public class LuceneQueryWikipedia {
     //CSV file header
     private static final String FILE_HEADER = "relation,mention,object,support_extracted_string";
 
-    public void search_query(File indexdirectory, File datadirectory,String resultdirectory, String filetype) throws IOException, ParseException {
+    public void search_query(File indexdirectory, File datadirectory, String resultdirectory, String filetype) throws IOException, ParseException {
 
         //csv files to get the wuery terms
         File[] files = datadirectory.listFiles();
@@ -56,37 +57,38 @@ public class LuceneQueryWikipedia {
 
                     //Create the file reader
                     List<Wiki_Extracts> extracts = new ArrayList();
-                    String old_filename=files[i].getAbsolutePath();
-                    int ch=old_filename.lastIndexOf("\\");
-                    String concat_filename=old_filename.substring(ch+1,old_filename.length()-4);
+                    String old_filename = files[i].getAbsolutePath();
+                    int ch = old_filename.lastIndexOf("\\");
+                    String concat_filename = old_filename.substring(ch + 1, old_filename.length() - 4);
                     System.out.println(concat_filename);
                     fileReader = new BufferedReader(new FileReader(files[i]));
                     String line = "";
                     //Read the CSV file header to skip it
                     fileReader.readLine();
 
+                    HashMap<String, String> eliminatingAllDuplicates = new HashMap<String, String>();
                     while ((line = fileReader.readLine()) != null) {
 
                         //Get all tokens available in line
-                        line=line+",";
+                        line = line + ",";
                         String[] tokens = line.split(COMMA_DELIMITER);
                         //System.out.println(tokens.length);
 
-                        if (tokens.length > 2 && tokens.length <4 ) {
+                        if (tokens.length > 2 && tokens.length < 4) {
                             //Create a new extract object and fill his  data
-                            tokens[mention_id]=tokens[mention_id].replace("_"," ");
-                            tokens[object_id]=tokens[object_id].replace("_"," ");
-                            tokens[mention_id] = tokens[mention_id].replaceAll("[-+.^:\\/()!']"," ");
-                            tokens[object_id] = tokens[object_id].replaceAll("[-+.^:,\\/()!']"," ");
-                            if(tokens[mention_id]!=null && tokens[object_id]!= null ) {
+                            tokens[mention_id] = tokens[mention_id].replace("_", " ");
+                            tokens[object_id] = tokens[object_id].replace("_", " ");
+                            tokens[mention_id] = tokens[mention_id].replaceAll("[-+.^:\\/()!']", " ");
+                            tokens[object_id] = tokens[object_id].replaceAll("[-+.^:,\\/()!']", " ");
+                            if (tokens[mention_id] != null && tokens[object_id] != null) {
                                 Wiki_Extracts wiki_ex = new Wiki_Extracts(tokens[relation_id], tokens[mention_id], tokens[object_id]);
                                 extracts.add(wiki_ex);
                             }
                         }
                     }
                     //create File object
-                    File file = new File(resultdirectory+"NewsWire_"+concat_filename+"_Evidence"+"."+filetype);
-                    String filename=file.getAbsolutePath();
+                    File file = new File(resultdirectory + "Wikipedia_" + concat_filename + "_Evidence" + "." + filetype);
+                    String filename = file.getAbsolutePath();
                     //File writer
                     fileWriter = new FileWriter(filename);
                     //Write the CSV file header
@@ -94,49 +96,55 @@ public class LuceneQueryWikipedia {
                     //Add a new line separator after the header
                     fileWriter.append(NEW_LINE_SEPARATOR);
 
-                    System.out.println("Writing Text File for "+concat_filename);
-                    for(Wiki_Extracts wiki_exs:extracts) {
-                        //lucene query
+                    System.out.println("Writing Text File for " + concat_filename);
+                    //HashMap<String, String> eliminatingPairDuplicates = new HashMap<String, String>();
+                    for (Wiki_Extracts wiki_exs : extracts) {
+                        //lucene phrase query
 
-                       /* String[] mentionsTokenList=wiki_exs.getMentions().split(" ");
-                        String[] objectsTokenList=wiki_exs.getObject().split(" ");*/
-                        TopScoreDocCollector collector_bool = TopScoreDocCollector.create(100);
-                        BooleanQuery query = new BooleanQuery();
-                      /*  int mentionTokenCount=0;
-                        int objectTokenCount=0;
-                        for(String mentionTokens:mentionsTokenList){
-                            mentionTokenCount+=1;
-                            String concatQueryName="query"+mentionTokenCount;
-                            Query mentionTokensQuery = new TermQuery(new Term(TEXT, mentionTokens));
-                        }*/
-                        Query query1 = new TermQuery(new Term(TEXT, wiki_exs.getMentions()));
-                        Query query2 = new TermQuery(new Term(TEXT, wiki_exs.getObject()));
-                        query.add(query1, BooleanClause.Occur.MUST);
-                        query.add(query2, BooleanClause.Occur.MUST);
-                        //parser.parse(String.valueOf(query));
-                        searcher.search(parser.parse(QueryParser.escape(String.valueOf(query))), collector_bool);
-                        ScoreDoc[] hits_bool = collector_bool.topDocs().scoreDocs;
+                        PhraseQuery queryMentions = new PhraseQuery();
+                        //queryMentions.setSlop(1);
+                        String[] mentionWords = wiki_exs.getMentions().split(" ");
+                        for (String mentionWord : mentionWords) {
+                            queryMentions.add(new Term(TEXT, mentionWord));
+                        }
+                        PhraseQuery queryObjects = new PhraseQuery();
+                        //queryObjects.setSlop(1);
+                        String[] objectWords = wiki_exs.getObject().split(" ");
+                        for (String objectWord : objectWords) {
+                            queryObjects.add(new Term(TEXT, objectWord));
+                        }
 
-                        for (int k = 0; k < hits_bool.length; k++) {
-                            int docId = hits_bool[k].doc;
-                            Document d = searcher.doc(docId);
+                        BooleanQuery booleanQuery = new BooleanQuery();
+                        booleanQuery.add(queryMentions, BooleanClause.Occur.MUST);
+                        booleanQuery.add(queryObjects, BooleanClause.Occur.MUST);
 
-                            fileWriter.append(wiki_exs.getRelation());
-                            fileWriter.append(COMMA_DELIMITER);
-                            fileWriter.append(wiki_exs.getMentions());
-                            fileWriter.append(COMMA_DELIMITER);
-                            fileWriter.append(wiki_exs.getObject());
-                            fileWriter.append(COMMA_DELIMITER);
-                            String text=d.get(TEXT);
-                            text=text.replace("[-+.^:\\/()!']"," ");
-                            text=text.replaceAll("[^a-zA-Z0-9]+", " ");
-                            fileWriter.append(text);
-                            fileWriter.append(NEW_LINE_SEPARATOR);
-                            //System.out.println((k + 1) + ". " + d.get(TEXT));
+                        //do the search
+                        TopDocs hits = searcher.search(parser.parse(String.valueOf(booleanQuery)), 100);
+                        //System.out.println("Number of docs hits"+hits.totalHits);
+                        for (ScoreDoc scoreDoc : hits.scoreDocs) {
+                            Document d = searcher.doc(scoreDoc.doc);
+
+                            if (!eliminatingAllDuplicates.containsKey(wiki_exs.getMentions()+wiki_exs.getObject()) && !eliminatingAllDuplicates.containsValue(d.get(TEXT)))
+                            {
+                                eliminatingAllDuplicates.put(wiki_exs.getMentions()+wiki_exs.getObject(),d.get(TEXT));
+                                fileWriter.append(wiki_exs.getRelation());
+                                fileWriter.append(COMMA_DELIMITER);
+                                fileWriter.append(wiki_exs.getMentions());
+                                fileWriter.append(COMMA_DELIMITER);
+                                fileWriter.append(wiki_exs.getObject());
+                                fileWriter.append(COMMA_DELIMITER);
+                                String text = d.get(TEXT);
+                                text = text.replace("[-+.^:\\/()!']", " ");
+                                text = text.replaceAll("[^a-zA-Z0-9]+", " ");
+                                //System.out.println(text);
+                                fileWriter.append(text);
+                                fileWriter.append(NEW_LINE_SEPARATOR);
+                                //System.out.println((k + 1) + ". " + d.get(TEXT));
+                            }
                         }
 
                     }
-                    System.out.println("Writing Text File for Successful "+concat_filename);
+                    System.out.println("Writing Text File for Successful " + concat_filename);
                 }
 
             }
@@ -145,7 +153,7 @@ public class LuceneQueryWikipedia {
                 System.out.println(exs.toString());
             }*/
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error in CsvFileReader/Writer !!!");
             e.printStackTrace();
         } finally {
@@ -167,7 +175,7 @@ public class LuceneQueryWikipedia {
 
 
         // this has the path where the index is present
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/siblings/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/foundedBy/");
 
         // this is the path from which the documents to be queried
         File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Freebase_Entities/Query/");
@@ -181,7 +189,7 @@ public class LuceneQueryWikipedia {
         // this object will call the index method to generate the indexing
         LuceneQueryWikipedia corpusindex = new LuceneQueryWikipedia();
 
-        corpusindex.search_query(indexdirectory, datadirectory,resultdirectory, filetype);
+        corpusindex.search_query(indexdirectory, datadirectory, resultdirectory, filetype);
 
     }
 

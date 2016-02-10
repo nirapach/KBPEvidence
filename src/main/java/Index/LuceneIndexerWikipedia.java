@@ -158,10 +158,10 @@ public class LuceneIndexerWikipedia {
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/siblings/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/spouse/");
 
         // this is the path from which the documents to be indexed
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Text/siblings/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Text/spouse/");
 
         // filetype that is present in the corpus
         String filetype = "txt";
