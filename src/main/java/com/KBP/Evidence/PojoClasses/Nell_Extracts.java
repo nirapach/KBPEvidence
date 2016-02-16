@@ -1,4 +1,4 @@
-package PojoClasses;
+package com.KBP.Evidence.PojoClasses;
 
 /**
  * Created by Niranjan on 12/7/2015.

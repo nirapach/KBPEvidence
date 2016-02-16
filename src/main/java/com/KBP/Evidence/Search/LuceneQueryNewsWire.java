@@ -1,4 +1,4 @@
-package Search;
+package com.KBP.Evidence.Search;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -6,9 +6,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import PojoClasses.Nell_Extracts;
+import com.KBP.Evidence.PojoClasses.Nell_Extracts;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -17,10 +16,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.util.Version;
 
 
 public class LuceneQueryNewsWire {

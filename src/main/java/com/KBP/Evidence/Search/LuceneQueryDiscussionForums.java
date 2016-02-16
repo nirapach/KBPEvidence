@@ -1,6 +1,6 @@
-package Search;
+package com.KBP.Evidence.Search;
 
-import PojoClasses.Nell_Extracts;
+import com.KBP.Evidence.PojoClasses.Nell_Extracts;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;

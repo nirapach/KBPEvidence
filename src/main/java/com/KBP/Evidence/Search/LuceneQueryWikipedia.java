@@ -1,7 +1,7 @@
-package Search;
+package com.KBP.Evidence.Search;
 
-import PojoClasses.Nell_Extracts;
-import PojoClasses.Wiki_Extracts;
+import com.KBP.Evidence.PojoClasses.Nell_Extracts;
+import com.KBP.Evidence.PojoClasses.Wiki_Extracts;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -134,8 +134,8 @@ public class LuceneQueryWikipedia {
                                 fileWriter.append(wiki_exs.getObject());
                                 fileWriter.append(COMMA_DELIMITER);
                                 String text = d.get(TEXT);
-                                text = text.replace("[-+.^:\\/()!']", " ");
-                                text = text.replaceAll("[^a-zA-Z0-9]+", " ");
+                                //text = text.replace("[-+.^:\\/()!']", " ");
+                                //text = text.replaceAll("[^a-zA-Z0-9]+", " ");
                                 //System.out.println(text);
                                 fileWriter.append(text);
                                 fileWriter.append(NEW_LINE_SEPARATOR);
@@ -175,13 +175,13 @@ public class LuceneQueryWikipedia {
 
 
         // this has the path where the index is present
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/foundedBy/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/WhiteSpace/foundedBy/");
 
         // this is the path from which the documents to be queried
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Freebase_Entities/Query/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Freebase_Entities/foundedBy/");
 
         // this is the path from which the result needs to be stored
-        String resultdirectory = "C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/ResultDirectory/";
+        String resultdirectory = "C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/ResultDirectory/WhiteSpace/foundedBy/";
 
         // filetype that is present in the corpus
         String filetype = "txt";

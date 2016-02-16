@@ -23,12 +23,18 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="KBPEvidence" />
+      </profile>
+      <profile default="false" name="Annotation profile for KBPEvidenceForRelations" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="KBPEvidenceForRelations" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="KBPEvidence" target="1.5" />
-      <module name="KBPEvidenceForRelations" target="1.5" />
+      <module name="KBPEvidenceForRelations" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package Index; /**
+package com.KBP.Evidence.Index; /**
  * Created by Niranjan on 12/6/2015.
  */
 
@@ -144,7 +144,7 @@ public class LuceneIndexerWeb {
 
     }
 
-    // main method where the object for the GenerateIndex class is instantiated
+    // com.KBP.Evidence.main method where the object for the GenerateIndex class is instantiated
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created

@@ -1,12 +1,16 @@
-package Index; /**
+package com.KBP.Evidence.Index; /**
  * Created by Niranjan on 12/6/2015.
  */
+
 import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import edu.stanford.nlp.ling.HasWord;
+import edu.stanford.nlp.ling.Sentence;
+import edu.stanford.nlp.process.DocumentPreprocessor;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -29,7 +33,7 @@ public class LuceneIndexerNewsWire {
     private void index(File indexdirectory, File datadirectory, String filetype)
             throws Exception {
 
-        Path path =Paths.get(String.valueOf(indexdirectory));
+        Path path = Paths.get(String.valueOf(indexdirectory));
         Directory inddir;
         inddir = FSDirectory.open(path);
         StandardAnalyzer indexanalyzer = new StandardAnalyzer();
@@ -63,7 +67,7 @@ public class LuceneIndexerNewsWire {
         int corpuslen = 0;
         for (int i = 0; i < files.length; i++) {
             corpuslen++;
-            int doc_count=0;
+            int doc_count = 0;
             if (!files[i].isDirectory() && !files[i].isHidden()
                     && files[i].canRead() && files[i].exists()) {
                 System.out.println("\n Indexing is going on with file"
@@ -73,22 +77,34 @@ public class LuceneIndexerNewsWire {
                         .get(files[i].getCanonicalPath())));
                 String[] alldocs = fileContent.split("</DOC>");
                 int docsize = alldocs.length;
-                String[] documents = new String[docsize-1];
-                for(int k=0;k<docsize-1;k++){
-                    documents[k]  = alldocs[k];
+                String[] documents = new String[docsize - 1];
+                for (int k = 0; k < docsize - 1; k++) {
+                    documents[k] = alldocs[k];
                 }
                 for (String docContent : documents) {
-                    String[] posContents = docContent.split("</P>");
+                    String[] posContentsList = docContent.split("</P>");
                     String para = "P";
-                    for (String posContent : posContents) {
-                        Document document = new Document();
-                        if (posContent != null) {
-                            doc_count+=1;
-                            for (int j = 0; j < tag.size(); j++) {
-                                String tagContent = "";
-                                int startIndex = 0;
-                                StringBuffer contentBuffer = new StringBuffer();
-                                if (j == 0) {
+                    for (String posContent : posContentsList) {
+
+                        Reader reader = new StringReader(posContent);
+                        DocumentPreprocessor docParser = new DocumentPreprocessor(reader);
+                        List<String> sentenceList = new ArrayList<String>();
+
+                        for (List<HasWord> sentence : docParser) {
+                            String sentenceString = Sentence.listToString(sentence);
+                            sentenceList.add(sentenceString.toString());
+                        }
+
+                        for (String indexContent : sentenceList) {
+
+                            if (posContent != null) {
+                                doc_count += 1;
+                                Document document = new Document();
+                                for (int j = 0; j < tag.size(); j++) {
+                                    String tagContent = "";
+                                    int startIndex = 0;
+                                    StringBuffer contentBuffer = new StringBuffer();
+                                    if (j == 0) {
                                  /*   while ((startIndex = docContent.indexOf
                                             ("<" + tag.get(j), startIndex)) != -1) {
 
@@ -100,23 +116,23 @@ public class LuceneIndexerNewsWire {
                                         startIndex += content.length();
                                         // System.out.println(content);
                                     }*/
-                                    while ((startIndex = docContent.indexOf(
-                                            "<" + para + ">", startIndex)) != -1) {
+                                        while ((startIndex = docContent.indexOf(
+                                                "<" + para + ">", startIndex)) != -1) {
 
-                                        startIndex += para.length() + 3;
-                                        // int endindex = docContent.indexOf("</" + tag.get(j)
-                                        //    + ">", startIndex);
-                                        int endindex = posContent.length();
-                                        if (endindex > startIndex) {
-                                            String content = docContent.substring(startIndex,
-                                                    endindex);
-                                            contentBuffer.append(content);
-                                            startIndex += content.length();
+                                            startIndex += para.length() + 3;
+                                            // int endindex = docContent.indexOf("</" + tag.get(j)
+                                            //    + ">", startIndex);
+                                            int endindex = posContent.length();
+                                            if (endindex > startIndex) {
+                                                String content = docContent.substring(startIndex,
+                                                        endindex);
+                                                contentBuffer.append(content);
+                                                startIndex += content.length();
+                                            }
+                                            // System.out.println(content);
                                         }
-                                        // System.out.println(content);
-                                    }
 
-                                } /*else if (j == 1) {
+                                    } /*else if (j == 1) {
                                     *//*while ((startIndex = docContent.indexOf(
                                             "<" + para + ">", startIndex)) != -1) {
 
@@ -134,28 +150,27 @@ public class LuceneIndexerNewsWire {
                                     }*//*
                                 }*/
 
-                                tagContent = contentBuffer.toString();
-                                // System.out.println(tagContent);
-                                if (j == 0)
-                                    //document.add(new StringField(DOCNO, tagContent, Field.Store.YES));
-                                    document.add(new StringField(DOCNO, "doc_no_"+doc_count, Field.Store.YES));
-                                    document.add(new TextField(tag.get(j), tagContent, Field.Store.YES));
+                                    tagContent = contentBuffer.toString();
+                                    // System.out.println(tagContent);
+                                    if (j == 0)
+                                        //document.add(new StringField(DOCNO, tagContent, Field.Store.YES));
+                                        document.add(new StringField(DOCNO, "doc_no_" + doc_count, Field.Store.YES));
+                                        document.add(new TextField(tag.get(j), tagContent, Field.Store.YES));
                                /* else
                                     //System.out.println(tag.get(j));
                                     document.add(new TextField(tag.get(j), tagContent, Field.Store.YES));*/
-                            }
-                            //System.out.println("Adding document");
-                            indwriter.addDocument(document);
+                                }
+                                //System.out.println("Adding document");
+                                indwriter.addDocument(document);
 
+                            }
                         }
                     }
                 }
 
 
                 indexstatus = 1;
-            }
-
-            else {
+            } else {
                 indexstatus = 0;
             }
         }
@@ -169,11 +184,11 @@ public class LuceneIndexerNewsWire {
 
     }
 
-    // main method where the object for the GenerateIndex class is instantiated
+    // com.KBP.Evidence.main method where the object for the GenerateIndex class is instantiated
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/newswire_index1/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/NewsWire_Index/");
 
         // this is the path from which the documents to be indexed
         File datadirectory = new File("C:/Users/Niranjan/Documents/Fall 2015/Independent Study/KBP/newswire/");

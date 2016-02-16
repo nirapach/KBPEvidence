@@ -1,24 +1,19 @@
-package Index; /**
+package com.KBP.Evidence.Index; /**
  * Created by Niranjan on 12/6/2015.
  */
 
+import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.Sentence;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import edu.stanford.nlp.process.DocumentPreprocessor;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.HasWord;
-import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.process.PTBTokenizer;
 
 import java.io.File;
 import java.io.Reader;
@@ -31,7 +26,7 @@ import java.util.List;
 
 
 @SuppressWarnings("unchecked")
-public class LuceneIndexerWikipedia {
+public class LuceneIndexerWikipediaWhiteSpaceAnalyzer {
 
     /**
      * @param args
@@ -45,8 +40,8 @@ public class LuceneIndexerWikipedia {
         Path path = Paths.get(String.valueOf(indexdirectory));
         Directory inddir;
         inddir = FSDirectory.open(path);
-        StandardAnalyzer indexanalyzer = new StandardAnalyzer();
-
+        //StandardAnalyzer indexanalyzer = new StandardAnalyzer();
+        WhitespaceAnalyzer indexanalyzer=new WhitespaceAnalyzer();
         IndexWriterConfig indwrcon = new IndexWriterConfig(indexanalyzer);
 
         indwrcon.setOpenMode(OpenMode.CREATE);
@@ -59,9 +54,9 @@ public class LuceneIndexerWikipedia {
         indwriter.forceMerge(1);
         indwriter.commit();
 
-        System.out.println("Index Commited");
+        System.out.println("com.KBP.Evidence.Index Commited");
         indwriter.close();
-        System.out.println("Index Closed");
+        System.out.println("com.KBP.Evidence.Index Closed");
 
     }
 
@@ -94,7 +89,7 @@ public class LuceneIndexerWikipedia {
                 }
                 for (String docContent : documents) {
                     extractCount += 1;
-                    docContent = docContent.replaceAll("[-+^:\\/()!'=]", " ");
+                    //docContent = docContent.replaceAll("[-+^:\\/()!'=]", " ");
                     System.out.println("Number of extract docs so far:" + extractCount);
                     Reader reader = new StringReader(docContent);
                     DocumentPreprocessor docParser = new DocumentPreprocessor(reader);
@@ -154,20 +149,20 @@ public class LuceneIndexerWikipedia {
 
     }
 
-    // main method where the object for the GenerateIndex class is instantiated
+    // com.KBP.Evidence.main method where the object for the GenerateIndex class is instantiated
     public static void main(String[] args) throws Exception {
 
         // this has the path where the index needs to be created
-        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/spouse/");
+        File indexdirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Index/WhiteSpace/foundedBy/");
 
         // this is the path from which the documents to be indexed
-        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Text/spouse/");
+        File datadirectory = new File("C:/Users/Niranjan/Documents/Spring2016/INDStudy/RA/Wikipedia_Text/foundedBy/");
 
         // filetype that is present in the corpus
         String filetype = "txt";
 
         // this object will call the index method to generate the indexing
-        LuceneIndexerWikipedia corpusindex = new LuceneIndexerWikipedia();
+        LuceneIndexerWikipediaWhiteSpaceAnalyzer corpusindex = new LuceneIndexerWikipediaWhiteSpaceAnalyzer();
 
         corpusindex.index(indexdirectory, datadirectory, filetype);
 
